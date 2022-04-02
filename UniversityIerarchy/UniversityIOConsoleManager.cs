@@ -1,4 +1,6 @@
-﻿namespace UniversityIerarchy;
+﻿using System.Reflection;
+
+namespace UniversityIerarchy;
 
 public static class UniversityIOConsoleManager
 {
@@ -66,6 +68,54 @@ public static class UniversityIOConsoleManager
             Console.WriteLine(student.Facultet);
             Console.WriteLine(student.Group);
             Console.WriteLine("-------------------");
+        }
+    }
+    
+    public static void PrintStudents(List<Student> students)
+    {
+        Console.WriteLine("Список студентов: ");
+        foreach (var student in students)
+        {
+            Console.WriteLine(student.StudentId);
+            Console.WriteLine(student.FIO);
+            Console.WriteLine(student.Birthday.ToString());
+            Console.WriteLine(student.Facultet);
+            Console.WriteLine(student.Group);
+            Console.WriteLine("-------------------");
+        }
+    }
+
+    public static void findStudenyInfo(University university)
+    {
+        Console.WriteLine("Будем искать студентов по некоторым параметрам:");
+        Console.WriteLine("Введите порядковый номер параметра для поиска из доступных:");
+        PropertyInfo[] myPropertyInfo;
+        Type type = typeof(Student);
+        myPropertyInfo = type.GetProperties();
+        int counter = 1;
+        foreach (var item in myPropertyInfo)
+        {
+            Console.WriteLine(counter + ". " + item.Name);
+            counter++;
+        }
+
+        string propName = myPropertyInfo[Convert.ToInt32(Console.ReadLine()) - 1].Name;
+
+        switch (propName)
+        {
+            case "Facultet" :
+                Console.Write("Введите название факультета:");
+                string facultet = Console.ReadLine();
+                List<Student> findStudents = new List<Student>();
+                foreach (var student in university.Students)
+                {
+                    if (student.Facultet == facultet)
+                    {
+                        findStudents.Add(student);
+                    }
+                }
+                PrintStudents(findStudents);
+                break;
         }
     }
 }
